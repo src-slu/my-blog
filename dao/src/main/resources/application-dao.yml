@@ -1,0 +1,42 @@
+spring:
+  datasource:
+    url: jdbc:mysql://47.102.194.98:3306/email_manager?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&useSSL=false
+    username: root
+    password: QWA@ssx.newPass1!
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  #####  rabbitmq  #####
+  rabbitmq:
+    virtual-host: /
+    addresses: 47.102.194.98
+    port: 5672
+    username: guest
+    password: guest
+    connection-timeout: 3000
+    # 开启confirm回调函数
+    publisher-returns: true
+    # 开启returnMessage回调
+#    publisher-confirms: true
+    listener:
+      simple:
+        # 设置手动确认(ack)
+        acknowledge-mode: manual
+        # 每秒处理消息速度
+        prefetch: 10
+
+######  eureka  #####
+eureka:
+  client:
+    service-url:
+      defaultZone: http://47.102.194.98:8761/eureka/
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port}
+
+#####  Mybatis  #####
+mybatis:
+  type-aliases-package: com.ls.springcloud.pojo
+  mapper-locations: classpath:/static/mybatis/mapper/*.xml
+logging:
+  level:
+    com.ls.springcloud.email: debug

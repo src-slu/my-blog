@@ -1,0 +1,57 @@
+server:
+  port: 9000
+spring:
+  application:
+    name: service-provider
+  profiles: # 使用utils modules配置
+    active: utils,dao
+
+  #####  rabbitmq  #####
+  rabbitmq:
+    virtual-host: /
+    addresses: 47.102.194.98
+    port: 5672
+    username: guest
+    password: guest
+    connection-timeout: 3000
+    # 开启confirm回调函数
+    publisher-returns: true
+    # 开启returnMessage回调
+    publisher-confirms: true
+    listener:
+      simple:
+        # 设置手动确认(ack)
+        acknowledge-mode: manual
+        # 每秒处理消息速度
+        prefetch: 100
+
+  #####  thymeleaf   ####
+  thymeleaf:
+    mode: HTML5
+    encoding: UTF-8
+    prefix: classpath:/static/thymeleaf/
+    suffix: .html
+    cache: false
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
+
+######  eureka  #######
+eureka:
+  client:
+    service-url:
+      defaultZone: http://47.102.194.98:8761/eureka/
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port}
+
+######  Mybatis  #####
+#mybatis:
+#  type-aliases-package: com.ls.springcloud.common.pojo
+#  mapper-locations: classpath:/static/mybatis/mapper/*.xml
+#
+#####  日志  ####
+#logging:
+#  level:
+#    com.ls.springcloud.email: debug

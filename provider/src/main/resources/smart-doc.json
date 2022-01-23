@@ -1,0 +1,29 @@
+{
+  "serverUrl": "http://127.0.0.1",
+  "isStrict": false,
+  "allInOne": true,
+  "outPath": "${base.dir}/docs",
+  "coverOld": true,
+  "packageFilters": "",
+  "md5EncryptedHtmlName": false,
+  "projectName": "${project.name}",
+  "style":"xt256",
+  "createDebugPage": true,
+  "skipTransientField": true,
+  "requestHeaders": [
+    {
+      "name": "token",
+      "type": "string",
+      "desc": "desc",
+      "required": false,
+      "since": "-"
+    }
+  ],
+
+  "sourceCodePaths": [
+    {
+      "path": "src/main/java",
+      "desc": ""
+    }
+  ]
+}

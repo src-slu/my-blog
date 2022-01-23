@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Error Page</title>
+</head>
+<body>
+    <div id="error_msg">
+        <span>
+            <img src="../imgs/error.jpg"/>
+        </span>
+        <p th:text="${errorMsg}"></p>
+    </div>
+</body>
+
+<style>
+    body{
+        text-align: center;
+        margin-top: 7%;
+    }
+    #error_msg{
+        margin: 0 auto;
+    }
+    #error_msg p{
+        font-size: 45px;
+        font-style: inherit;
+        font-weight: bold;
+        color: darkred;
+        margin: 0;
+    }
+</style>
+</html>

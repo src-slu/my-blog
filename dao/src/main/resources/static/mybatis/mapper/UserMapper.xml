@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ls.springcloud.mapper.UserMapper">
+    <resultMap id="user" type="com.ls.springcloud.pojo.User">
+        <result column="email" property="email" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result column="name" property="name" javaType="java.lang.String" jdbcType="VARCHAR"/>
+<!--        <result column="password" property="password" javaType="java.lang.String" jdbcType="VARCHAR"/>-->
+<!--        <result column="email" property="telephone" javaType="java.lang.Long" jdbcType="BIGINT" />-->
+        <result column="registry_date" property="registryDate" javaType="java.util.Date" jdbcType="DATE" />
+        <result column="active_status" property="activeStatus" javaType="java.lang.Integer" jdbcType="BIGINT" />
+    </resultMap>
+
+    <!-- 查找所有用户 -->
+    <select id="getAllUser">
+        select id, email, name, registry_date, active_status from user
+        limite #{limite} offset #{offset}
+    </select>
+
+    <!--保存用户-->
+    <insert id="save" parameterType="com.ls.springcloud.pojo.User">
+        insert into user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                name,
+            </if>
+            <if test="password != null">
+                password,
+            </if>
+            <if test="email != null">
+                email,
+            </if>
+            <if test="registryDate != null">
+                registry_date,
+            </if>
+            <if test="activeStatus != null">
+                active_status
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                #{name},
+            </if>
+            <if test="password != null">
+                #{password},
+            </if>
+            <if test="email != null">
+                #{email},
+            </if>
+            <if test="registryDate != null">
+                #{registryDate},
+            </if>
+            <if test="activeStatus != null">
+                #{activeStatus}
+            </if>
+        </trim>
+    </insert>
+
+    <!--获取密码-->
+    <select id="getPassword" parameterType="java.lang.String" resultType="java.lang.String">
+        select password from user
+        <where>
+            <if test="email != null">
+                and email = #{email}
+            </if>
+        </where>
+    </select>
+
+    <!-- 获取用户信息 -->
+    <select id="userInfo" parameterType="java.lang.String" resultMap="user">
+        select email,password,name,registry_date,active_status from user
+        <where>
+            <if test="email != null">
+                and email = #{email}
+            </if>
+        </where>
+    </select>
+
+    <delete id="remove" parameterType="java.lang.String" flushCache="true">
+        delete from user
+        <where>
+            <if test="email != null">
+                and email = #{email}
+            </if>
+        </where>
+    </delete>
+
+<!--    <delete id="deleteRelationFromUserAndEmail" parameterType="long">-->
+<!--        delete from user_email where 1=1-->
+<!--        and email = #{email}-->
+<!--    </delete>-->
+
+    <select id="getUserInfo" resultMap="user">
+        select email,password,name,registry_date,active_status from user
+        <where>
+            <if test="email != null">
+                and email = #{email}
+            </if>
+        </where>
+    </select>
+
+    <update id="activeUser" parameterType="java.lang.String">
+        update user set active_status = 1
+        where email = #{email}
+    </update>
+
+    <select id="getStatus" parameterType="java.lang.String">
+        select active_status from user
+        where email = #{email}
+    </select>
+
+    <update id="updatePassword" parameterType="com.ls.springcloud.pojo.User">
+        update user set
+        <if test="password != null">
+            password = #{password}
+        </if>
+        <where>
+            email = #{email}
+        </where>
+    </update>
+
+</mapper>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <title>用户注册激活</title>
+</head>
+<script>
+    function goLogin() {
+        /**
+         * 获取ip地址和端口
+         */
+        // var host = window.location.host;
+        var host = "http://localhost:9000";
+        var path = host + "/user/login";
+        window.location.href = path;
+    }
+</script>
+<body>
+<div class="div_active_result">
+    <h4 th:text="${msg}"></h4>
+    <button type="button" class="active_button" onclick="goLogin()">立即前往登录</button>
+</div>
+</body>
+<style>
+    .div_active_result {
+        margin-top: 200px;
+        text-align: center;
+        font-size: 40px;
+    }
+
+    .active_button {
+        width: 240px;
+        height: 50px;
+        font-size: 20px;
+        display: inline-block;
+        vertical-align: middle;
+        cursor: pointer;
+        color: #fff;
+        background-color: #46A3FF;
+        border-color: #46A3FF;
+        border-radius: 3px;
+    }
+</style>
+</html>

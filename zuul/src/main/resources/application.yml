@@ -1,0 +1,82 @@
+server:
+  port: 9003
+spring:
+  application:
+    name: service-zuul
+  profiles:
+    active: utils
+  jackson:
+    default-property-inclusion: non_null
+#  cloud:
+#    loadbalancer:
+#      ribbon:
+#        enabled: false
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://47.102.194.98:8761/eureka/
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port}
+
+zuul:
+  semaphore:
+    max-semaphores: 500 #可根据系统需要支持的并发数适当增加信号量的大小
+  # 前缀，用来做版本控制
+  prefix: /v1
+  # 禁用默认路由，执行配置的路由
+  ignored-services: "*"
+  routes:
+    provider:
+      serviceId: service-provider
+      path: /api-provider/**
+    email:
+      serviceId: service-email
+      path: /api-email/**
+  host:
+    socket-timeout-millis: 10000
+    connection-request-timeout-millis: 10000
+    connect-timeout-millis: 10000
+    max-total-connections: 500
+    max-per-route-connections: 50
+  ribbon:
+    eager-load:
+      enabled: true #饿加载方式加载ribbon
+
+# ribbon轮询超时时间配置
+#ribbon:
+#  ReadTimeout: 6000
+#  ConnectTimeout: 6000
+ribbon:
+  ReadTimeout: 10000
+  ConnectTimeout: 10000
+  MaxAutoRetriesNextServer: 1 # 默认1
+  MaxAutoRetries: 1 # 默认0
+
+## ribbon readtimeout计算公式：
+##（MaxAutoRetries+1）* （MaxAutoRetriesNextServer+1）*（ReadTimeout + ConnectTimeout）
+## 设置ribbon和hystrix熔断器时，熔断器的熔断时间应大于ribbon的readtimeout
+
+
+# 熔断器超时时间配置
+#hystrix:
+#  command:
+#    default:
+#      execution:
+#        isolation:
+#          thread:
+#            timeoutInMilliseconds: 10000
+hystrix:
+  threadpool:
+    default:
+      coreSize: 1000   #线程池数量
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 90000  #发生熔断的超时时间
+            strategy: SEMAPHORE   #隔离策略
+            semaphore:
+              max-semaphores: 2000 #信号量大小

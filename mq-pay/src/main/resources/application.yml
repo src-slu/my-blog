@@ -1,0 +1,44 @@
+server:
+  port: 9004
+
+spring:
+  application:
+    name: service-mq-pay
+  rabbitmq:
+    virtual-host: dead
+    addresses: 47.102.194.98
+    port: 5672
+    username: guest
+    password: guest
+    publisher-confirm-type: correlated
+    connection-timeout: 3000
+    publisher-returns: true
+    listener:
+      simple:
+        ## 当前监听容器数
+        concurrency: 1
+        ## 最大数
+        max-concurrency: 5
+        ## 设置手动ack
+        acknowledge-mode: manual
+        ## 每秒处理量
+        prefetch: 20
+        retry:
+          enabled: true
+
+        default-requeue-rejected: true
+    publisher-confirms: true
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://47.102.194.98:8761/eureka/
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}.${spring.cloud.client.ip-address}:${server.port}
+
+logging:
+  config: classpath:logback.xml
+#  pattern:
+#    dateformat: %date{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{56}.%method:%L -%msg%n

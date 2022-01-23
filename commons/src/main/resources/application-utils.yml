@@ -1,0 +1,24 @@
+#####  Redis   ###
+spring:
+  redis:
+    host: 47.102.194.98
+    port: 7001
+    password: pass_123@redis
+    database: 0 # 数据库索引
+    timeout: 300      # 连接超时时间
+    jedis:
+      pool:
+        max-active: 10 # 连接池最大连接数(负值表示不限制)
+        max-wait: -1  # 连接池最大阻塞时间(负值表示不限制)
+        max-idle: 8   # 连接池最大空闲连接
+        min-idle: 0   # 最小空闲连接
+    cluster:
+      nodes:
+        - 47.102.194.98:7001
+        - 47.102.194.98:7002
+        - 47.102.194.98:7003
+        - 47.102.194.98:7004
+        - 47.102.194.98:7005
+        - 47.102.194.98:7006
+  jackson:
+    default-property-inclusion: non_null #不返回实体类为null的字段
